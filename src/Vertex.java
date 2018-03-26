@@ -5,8 +5,8 @@ import java.util.HashSet;
 public class Vertex 
 {
 	protected ArrayList<Vertex> adjNodes = new ArrayList<Vertex>();
-	public int colour = 0;
-	public int id = GraphColouring.currID++;
+	public volatile int colour = 0;
+	public volatile int id = GraphColouring.currID++;
 	
 	static public boolean createEdge( Vertex u, Vertex v )
 	{
@@ -65,7 +65,7 @@ public class Vertex
 		return colour;
 	}
 	
-	public boolean isConflicting()
+	public boolean isConflictingIndexed()
 	{
 		for( Vertex node : adjNodes )
 		{
@@ -74,5 +74,17 @@ public class Vertex
 		}
 		return false;
 	}
+	
+	public boolean isConflicting()
+	{
+		for( Vertex node : adjNodes )
+		{
+			if( node.colour == this.colour )
+				return true;
+		}
+		return false;
+	}
+	
+	
 	
 }
