@@ -1,0 +1,43 @@
+[1mdiff --git a/src/GraphColouring.java b/src/GraphColouring.java[m
+[1mindex f1e2e51..9c51b56 100644[m
+[1m--- a/src/GraphColouring.java[m
+[1m+++ b/src/GraphColouring.java[m
+[36m@@ -59,6 +59,7 @@[m [mpublic class GraphColouring[m
+ 		for( GraphNode node : graph )[m
+ 		{[m
+ 			node.colour = node.getLowestViableColour();[m
+[32m+[m			[32mSystem.out.println( node.colour );[m
+ 		}[m
+ 		System.out.println("Done");[m
+ 		[m
+[1mdiff --git a/src/GraphNode.java b/src/GraphNode.java[m
+[1mindex a6bfeb7..1b60d63 100644[m
+[1m--- a/src/GraphNode.java[m
+[1m+++ b/src/GraphNode.java[m
+[36m@@ -5,7 +5,7 @@[m [mimport java.util.HashSet;[m
+ public class GraphNode [m
+ {[m
+ 	protected ArrayList<GraphNode> adjNodes = new ArrayList<GraphNode>();[m
+[31m-	public int colour = -1;[m
+[32m+[m	[32mpublic int colour = 0;[m
+ 	[m
+ 	static public boolean createEdge( GraphNode u, GraphNode v )[m
+ 	{[m
+[36m@@ -33,7 +33,7 @@[m [mpublic class GraphNode[m
+ 		for ( GraphNode v : adjNodes )[m
+ 		{[m
+ 			Integer colour =  v.colour;[m
+[31m-			if( !usedColours.contains( colour ) && colour.intValue() != -1 )[m
+[32m+[m			[32mif( !usedColours.contains( colour ) && colour.intValue() != 0 )[m
+ 			{[m
+ 				usedColours.add( colour );[m
+ 			}[m
+[36m@@ -46,7 +46,7 @@[m [mpublic class GraphNode[m
+ 			[m
+ 		});[m
+ 		[m
+[31m-		int colour = 0;[m
+[32m+[m		[32mint colour = 1;[m
+ 		for( int i = 0; i < usedColours.size(); i++ )[m
+ 		{[m
+ 			if( ( usedColours.get( i ).intValue() == colour ) )[m

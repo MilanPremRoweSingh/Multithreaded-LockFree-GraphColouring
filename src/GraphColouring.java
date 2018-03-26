@@ -4,10 +4,11 @@ import java.util.Random;
 public class GraphColouring 
 {	
 	static GraphNode[] graph;
+	public static int currID = 0;
+	private static int n, e, t;
 	
 	public static void main( String[] args )
 	{
-		int n, e, t;
 		
 		try
 		{
@@ -59,9 +60,12 @@ public class GraphColouring
 		for( GraphNode node : graph )
 		{
 			node.colour = node.getLowestViableColour();
+			System.out.println( node.colour );
 		}
-		System.out.println("Done");
-		
+		System.out.println("Done");	
 	}
+	
+	
+	
 	
 }

@@ -5,7 +5,8 @@ import java.util.HashSet;
 public class GraphNode 
 {
 	protected ArrayList<GraphNode> adjNodes = new ArrayList<GraphNode>();
-	public int colour = -1;
+	public int colour = 0;
+	public int id = GraphColouring.currID++;
 	
 	static public boolean createEdge( GraphNode u, GraphNode v )
 	{
@@ -33,7 +34,7 @@ public class GraphNode
 		for ( GraphNode v : adjNodes )
 		{
 			Integer colour =  v.colour;
-			if( !usedColours.contains( colour ) && colour.intValue() != -1 )
+			if( !usedColours.contains( colour ) && colour.intValue() != 0 )
 			{
 				usedColours.add( colour );
 			}
@@ -46,7 +47,7 @@ public class GraphNode
 			
 		});
 		
-		int colour = 0;
+		int colour = 1;
 		for( int i = 0; i < usedColours.size(); i++ )
 		{
 			if( ( usedColours.get( i ).intValue() == colour ) )
@@ -62,6 +63,16 @@ public class GraphNode
 		}
 		
 		return colour;
+	}
+	
+	public boolean isConflicting()
+	{
+		for( GraphNode node : adjNodes )
+		{
+			if( node.colour == this.colour && node.id < this.id )
+				return true;
+		}
+		return false;
 	}
 	
 }
