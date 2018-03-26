@@ -3,7 +3,7 @@ import java.util.Random;
 
 public class GraphColouring 
 {	
-	static GraphNode[] graph;
+	static Vertex[] graph;
 	public static int currID = 0;
 	private static int n, e, t;
 	
@@ -33,11 +33,11 @@ public class GraphColouring
 			return;
 		}
 		
-		graph = new GraphNode[n];
+		graph = new Vertex[n];
 		
 		for( int i = 0; i < n; i++ )
 		{
-			graph[i] = new GraphNode();
+			graph[i] = new Vertex();
 		}
 		
 		ArrayList<int[]> possibleEdges = new ArrayList<int[]>( n * (n-1) );
@@ -53,11 +53,11 @@ public class GraphColouring
 			int nextEdge = rand.nextInt( possibleEdges.size() );
 			
 			int[] verts = possibleEdges.remove( nextEdge );
-			GraphNode.createEdge( graph[ verts[0] ], graph[ verts[1] ] );
+			Vertex.createEdge( graph[ verts[0] ], graph[ verts[1] ] );
 			loc_e--;
 		}
 
-		for( GraphNode node : graph )
+		for( Vertex node : graph )
 		{
 			node.colour = node.getLowestViableColour();
 			System.out.println( node.colour );

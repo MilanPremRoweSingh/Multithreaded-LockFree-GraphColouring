@@ -2,16 +2,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 
-public class GraphNode 
+public class Vertex 
 {
-	protected ArrayList<GraphNode> adjNodes = new ArrayList<GraphNode>();
+	protected ArrayList<Vertex> adjNodes = new ArrayList<Vertex>();
 	public int colour = 0;
 	public int id = GraphColouring.currID++;
 	
-	static public boolean createEdge( GraphNode u, GraphNode v )
+	static public boolean createEdge( Vertex u, Vertex v )
 	{
 		boolean uvAreAdj = false;
-		for ( GraphNode v0 : u.adjNodes )
+		for ( Vertex v0 : u.adjNodes )
 		{
 			uvAreAdj = ( v0 == v );
 			if ( uvAreAdj )
@@ -31,7 +31,7 @@ public class GraphNode
 	public int getLowestViableColour()
 	{
 		ArrayList<Integer> usedColours = new ArrayList<Integer>();
-		for ( GraphNode v : adjNodes )
+		for ( Vertex v : adjNodes )
 		{
 			Integer colour =  v.colour;
 			if( !usedColours.contains( colour ) && colour.intValue() != 0 )
@@ -67,7 +67,7 @@ public class GraphNode
 	
 	public boolean isConflicting()
 	{
-		for( GraphNode node : adjNodes )
+		for( Vertex node : adjNodes )
 		{
 			if( node.colour == this.colour && node.id < this.id )
 				return true;
