@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GraphColouring 
@@ -38,21 +39,28 @@ public class GraphColouring
 			graph[i] = new GraphNode();
 		}
 		
-		for ( int i = 0; i < e; i++ )
+		ArrayList<int[]> possibleEdges = new ArrayList<int[]>( n * (n-1) );
+		for( int i = 0; i < n; i++ )
+			for( int j = 0; j < n; j++ )
+				if( i != j )
+					possibleEdges.add( new int[] {i, j} );
+		
+		int loc_e = e;
+		while( loc_e > 0 )
 		{
-			boolean edgeCreated = false;
-					
-			while( !edgeCreated )
-			{
-				Random rand = new Random();
-				
-				int u = rand.nextInt( n );
-				int v = rand.nextInt( n );
-				
-				edgeCreated = GraphNode.createEdge( graph[u], graph[v] );
-			}
+			Random rand = new Random();
+			int nextEdge = rand.nextInt( possibleEdges.size() );
+			
+			int[] verts = possibleEdges.remove( nextEdge );
+			GraphNode.createEdge( graph[ verts[0] ], graph[ verts[1] ] );
+			loc_e--;
 		}
-		graph[0].getLowestViableColour();
+
+		for( GraphNode node : graph )
+		{
+			node.colour = node.getLowestViableColour();
+		}
+		System.out.println("Done");
 		
 	}
 	
