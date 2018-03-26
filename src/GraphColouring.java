@@ -1,7 +1,10 @@
+import java.util.Random;
 
 public class GraphColouring 
 {	
-	static void main( String[] args )
+	static GraphNode[] graph;
+	
+	public static void main( String[] args )
 	{
 		int n, e, t;
 		
@@ -27,6 +30,30 @@ public class GraphColouring
 			System.out.println( "Invalid arguments" );
 			return;
 		}
+		
+		graph = new GraphNode[n];
+		
+		for( int i = 0; i < n; i++ )
+		{
+			graph[i] = new GraphNode();
+		}
+		
+		for ( int i = 0; i < e; i++ )
+		{
+			boolean edgeCreated = false;
+					
+			while( !edgeCreated )
+			{
+				Random rand = new Random();
+				
+				int u = rand.nextInt( n );
+				int v = rand.nextInt( n );
+				
+				edgeCreated = GraphNode.createEdge( graph[u], graph[v] );
+			}
+		}
+		graph[0].getLowestViableColour();
+		
 	}
 	
 }
