@@ -1,5 +1,9 @@
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GraphColouring 
@@ -71,7 +75,7 @@ public class GraphColouring
 			e = Integer.parseInt( args[1] );
 			t = Integer.parseInt( args[2] );
 			
-			if ( n < 1 || e < 0 || e > n*(n-1) || t < 1 )
+			if ( n < 1 || e < 0 || e > n*(n-1)/2 || t < 1 )
 			{
 				System.out.println( "Invalid arguments" );
 				return;
@@ -154,7 +158,6 @@ public class GraphColouring
 	
 	public static void generateGraph()
 	{
-		long time = System.currentTimeMillis();
 		graph = new Vertex[n];
 		
 		for( int i = 0; i < n; i++ )
@@ -162,33 +165,78 @@ public class GraphColouring
 			graph[i] = new Vertex();
 		}
 		
-		ArrayList<int[]> possibleEdges = new ArrayList<int[]>( n * (n-1) );
-		for( int i = 0; i < n; i++ )
-			for( int j = 0; j < n; j++ )
-				if( i != j )
-					possibleEdges.add( new int[] {i, j} );
-		
-		int loc_e = e;
-		Random rand = new Random();
-		while( loc_e > 0 )
+		if ( (double)e / (double)(n*n) > 1.0/64.0 ) //If the desired graph is dense, must keep track of indices used
 		{
-			int nextEdge = rand.nextInt( possibleEdges.size() );
+			ArrayList<Integer> nums = new ArrayList<Integer>( n );
+			for ( int i = 0; i < n; i++ )
+				nums.add( i );
+	
+			ArrayList<Pair<Integer>> pairs = generatePairs( null, nums );
 			
-			int[] verts = fastRemove( nextEdge, possibleEdges );
-			Vertex.createEdge( graph[ verts[0] ], graph[ verts[1] ] );
-			loc_e--;
+			int loc_e = e;
+			Random rand = new Random();
+			while( loc_e > 0 )
+			{
+				int nextEdge = rand.nextInt( pairs.size() );
+
+				Pair<Integer> pair = fastRemove( nextEdge, pairs);
+				Vertex.createEdge( graph[ pair.first ], graph[ pair.last ] );
+				loc_e--;
+			}
 		}
-		System.out.println( System.currentTimeMillis() - time );
+		else
+		{
+			int loc_e = e;
+			Random rand = new Random();
+			while( loc_e > 0 )
+			{
+				int u = rand.nextInt( n );
+				
+				int v = ( rand.nextInt( u + n - 1 ) + 1 ) % n ;
+
+				if ( Vertex.createEdge( graph[u], graph[v] ) )
+					loc_e--;
+			}
+		}
 	}
 	
-	public static int[] fastRemove( int idx, ArrayList<int[]> array )
+	public static <T> T fastRemove( int idx, ArrayList<T> array )
 	{
-		int[] temp = array.get( idx );
+		T temp = array.get( idx );
 		
 		array.set( idx, array.get( array.size() - 1 ) );
 		array.remove( array.size() - 1 );
 		
 		return temp;
+	}
+	
+	private static class Pair<T>
+	{
+		public T first;
+		public T last;
+		
+		Pair( T _first, T _last )
+		{
+			first = _first;
+			last  = _last;
+		}
+	}
+	
+	public static <T> ArrayList<Pair<T>> generatePairs( ArrayList<Pair<T>> set, ArrayList<T> items )
+	{
+		if ( set == null )
+			set = new ArrayList<Pair<T>>( items.size() * items.size() - 1 );
+		
+		for( int i = 0; i < items.size() - 1; i++ )
+		{
+			set.add( new Pair<T>( items.get(i), items.get( items.size() - 1 ) ) );
+		}
+		items.remove( items.size() - 1 );
+		
+		if( items.size() > 1 )
+			return generatePairs( set, items );
+		else
+			return set;
 	}
 	
 	public static boolean checkColouring( Vertex[] localGraph )
