@@ -49,7 +49,6 @@ public class GraphColouring
 				for( Vertex node : workset )
 				{
 					node.colour = node.getLowestViableColour();
-					//System.out.println( node.colour ); //DEBUG
 				}
 			}
 			else
@@ -59,6 +58,7 @@ public class GraphColouring
 					boolean isConflicting = node.isConflictingIndexed();
 					if ( isConflicting )
 					{
+						node.isConflictingIndexed();
 						conflictSet[ GraphColouring.numConf.getAndIncrement() ] = node;
 					}
 				}
@@ -75,7 +75,8 @@ public class GraphColouring
 			e = Integer.parseInt( args[1] );
 			t = Integer.parseInt( args[2] );
 			
-			if ( n < 1 || e < 0 || e > n*(n-1)/2 || t < 1 )
+			long temp = (long)n*((long)n-1l)/2l;
+			if ( n < 1 || e < 0 || e > temp || t < 1 )
 			{
 				System.out.println( "Invalid arguments" );
 				return;
@@ -93,6 +94,15 @@ public class GraphColouring
 		}
 		
 		generateGraph();
+		
+		for( int i = 0; i < n; i++ )
+		{
+			for( int j = 0; j < n; j++ )
+			{
+				if ( i == j )
+					continue;
+			}
+		}
 		
 		numConf = new AtomicInteger( n );
 		
@@ -124,6 +134,7 @@ public class GraphColouring
 				} 
 				catch ( InterruptedException e )
 				{
+					System.out.println("Check");
 					e.printStackTrace();
 				}
 			}
@@ -244,7 +255,9 @@ public class GraphColouring
 		for ( Vertex node : localGraph )
 		{
 			if ( node.isConflicting() )
+			{
 				return false;
+			}
 		}
 		return true;
 	}

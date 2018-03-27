@@ -13,19 +13,21 @@ public class Vertex
 		boolean uvAreAdj = false;
 		for ( Vertex v0 : u.adjNodes )
 		{
-			uvAreAdj = ( v0 == v );
+			uvAreAdj = ( v0.id == v.id );
 			if ( uvAreAdj )
 				break;
 		}
 		
 		if ( !uvAreAdj )
 		{
-			u.adjNodes.add( v );
-			v.adjNodes.add( u );
-			return true;
+			if(  v != u && u != v )
+			{
+				u.adjNodes.add( v );
+				v.adjNodes.add( u );
+				return true;
+			}
 		}
-		else
-			return false;
+		return false;
 	}
 	
 	public int getLowestViableColour()
@@ -47,22 +49,22 @@ public class Vertex
 			
 		});
 		
-		int colour = 1;
+		int loc_colour = 1;
 		for( int i = 0; i < usedColours.size(); i++ )
 		{
-			if( ( usedColours.get( i ).intValue() == colour ) )
+			if( ( usedColours.get( i ).intValue() == loc_colour ) )
 			{
-				colour++;
+				loc_colour++;
 				continue;
 			}
 			else
 			{
-				return colour;			
+				return loc_colour;			
 			}
 			
 		}
 		
-		return colour;
+		return loc_colour;
 	}
 	
 	public boolean isConflictingIndexed()
@@ -72,7 +74,7 @@ public class Vertex
 			if( node.colour == this.colour && node.id < this.id )
 				return true;
 		}
-		return false;
+		return false; 
 	}
 	
 	public boolean isConflicting()
@@ -80,7 +82,16 @@ public class Vertex
 		for( Vertex node : adjNodes )
 		{
 			if( node.colour == this.colour )
+			{
+				System.out.println( node.id +":" + node.colour );
+				System.out.println( this.id +":" + this.colour );
+				System.out.println( "________________" );
+				for( Vertex node1 : adjNodes )
+				{
+					System.out.println( node1.id +":" + node1.colour );
+				}
 				return true;
+			}
 		}
 		return false;
 	}
